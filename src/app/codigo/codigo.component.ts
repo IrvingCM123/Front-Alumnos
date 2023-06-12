@@ -18,7 +18,7 @@ export class CodigoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.DatosQR = this.Alumno + ',' + this.Matricula;
+    this.DatosQR = this.Alumno + ',' + this.Matricula + ',Presente';
   }
 
 }
