@@ -41,10 +41,10 @@ export class MenuComponent implements OnInit {
 
   async ngOnInit() {
     this.Token = this.datosLocales.obtener_DatoLocal('Resp');
-    this.obtener_nrcMaterias(this.Token);
-    this.obener_Datos(this.Token);
-    this.generarToken(this.nrc$.nrcs);
-    this.obtener_Materias(this.TokenNRC.token);
+    await this.obtener_nrcMaterias(this.Token);
+    await this.obener_Datos(this.Token);
+    await this.generarToken(this.nrc$.nrcs);
+    await this.obtener_Materias(this.TokenNRC.token);
   }
 
   async obener_Datos(Token: string) {
