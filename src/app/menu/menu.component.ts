@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MandarDatosQR } from './MandarDatos.service';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FirestoreService } from '../servicios/FirestoreListas.service';
 
 @Component({
   selector: 'app-menu',
@@ -9,14 +11,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
-
   public DatosQR: string = '';
 
-  private Alumno = 'Irving Rafael Conde Marín';
-  private Materia = '213642';
-  private Matricula = 'zS20006735';
+  private Alumno = '';
+  private Matricula = '';
+  private Datos: any;
 
   public Token: any;
+  public TokenNRC: any;
   public nrc$: any | string;
   public materias$: any | string;
   public Materias: any | string;
@@ -24,42 +26,97 @@ export class MenuComponent implements OnInit {
   constructor(
     private mandar: MandarDatosQR,
     private mostrar: Location,
-    private http: HttpClient
+    private http: HttpClient,
+    private datosLocales: FirestoreService,
+    private router: Router,
   ) { }
 
   MandarDatos() {
+    this.obener_Datos(this.Token); // Obtener los datos después de la redirección
+    this.router.navigate(['/Mostrar']); // Redireccionar al path "Mostrar"
     this.mandar.setMatricula(this.Matricula);
     this.mandar.setNombre(this.Alumno);
     this.mostrar.go;
   }
 
   async ngOnInit() {
-    this.Token = 1;
+    this.Token = this.datosLocales.obtener_DatoLocal('Resp');
     await this.obtener_nrcMaterias(this.Token);
+    await this.obener_Datos(this.Token);
+    console.log(this.nrc$.nrcs);
+    await this.generarToken(this.nrc$.nrcs);
+    await this.obtener_Materias(this.TokenNRC.token);
+  }
+
+  async obener_Datos(Token: string) {
+    const headers = {
+      Authorization: Token,
+    };
+    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    this.Datos = await new Promise((resolve, reject) => { this.http.get('http://localhost:3000/api/v1/estudiantes/', { headers: headers })
+      .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    this.Alumno = this.Datos.data.nombres + ' ' + this.Datos.data.apellidos;
+    this.Matricula = this.Datos.data.matricula;
   }
 
   async obtener_nrcMaterias(Token: string) {
-    this.http.post('http://localhost:3000/Servidor/VerMateriaDocente', {})
-      .subscribe(
-        (data: any) => {
-          this.nrc$ = data;
-        },
-        (error: any) => {
-          console.error('Error:', error);
-        }
-      );
+    const headers = {
+      Authorization: Token,
+    };
+    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', {})
+    this.nrc$ = await new Promise((resolve, reject) => {
+      this.http.get('http://localhost:3000/api/v1/estudiantes/MateriasAlumno', {
+          headers: headers,
+        })
+        .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
   }
 
   async obtener_Materias(materia: any) {
-    this.http.post('http://localhost:3000/Servidor/VerMateriaDocente', {})
+    const headers = {
+      Authorization: materia,
+    };
+    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    this.materias$ = await new Promise((resolve, reject) => {
+      this.http.get('http://localhost:3000/api/v1/estudiantes/materias', { headers: headers, })
       .subscribe(
-        (data: any) => {
-          this.materias$ = data;
+        (Resp: any) => {
+          resolve(Resp);
         },
         (error: any) => {
-          console.error('Error:', error);
+          reject(error);
         }
       );
-      this.Materias = this.materias$
+    });
+    this.Materias = this.materias$;
+  }
+
+  async generarToken(valor: string | any) {
+    this.TokenNRC = await new Promise((resolve, reject) => {
+      this.http.post('http://localhost:3000/api/v1/estudiantes/generarToken', valor)
+        .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
   }
 }

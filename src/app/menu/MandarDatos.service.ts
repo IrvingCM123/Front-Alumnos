@@ -10,14 +10,17 @@ export class MandarDatosQR {
 
   setNrc(dato: any) {
     this.NRC = dato;
+
   }
 
   setNombre(dato: any) {
     this.Nombre = dato;
+    console.log(dato)
   }
 
   setMatricula(dato: any) {
     this.Matricula = dato;
+    console.log(dato)
   }
 
   getNrc() {

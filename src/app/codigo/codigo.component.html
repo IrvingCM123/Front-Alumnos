@@ -1,15 +1,10 @@
 <body>
     <div class="container">
-  
+
         <qrcode [qrdata]="DatosQR" [width]="300" [errorCorrectionLevel]="'M'"></qrcode>
         <div>
           <p> Datos Recibidos: </p>
           <input type="text" [(ngModel)]="DatosQR">
-
-          <!-- Otra forma de mostrar los datos es: -->
-          {{ Alumno }}
-          {{ Materia }}
-          {{ Matricula }}
         </div>
       </div>
   </body>

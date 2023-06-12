@@ -4,7 +4,6 @@ import { FirestoreService } from '../servicios/FirestoreListas.service';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
-
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
@@ -12,10 +11,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RegistroComponent implements OnInit {
   nombre_usuario: string = '';
-  correo_usuario: string = '';
-  contrasena_usuario: string = '';
+  correo: string = '';
+  contrasena: string = '';
   confirmar_contrasena: string = '';
-  NPersonal_usuario: number = 0;
+  matricula: number = 0;
 
   file: File | any = null;
   comparar: boolean = false;
@@ -24,8 +23,7 @@ export class RegistroComponent implements OnInit {
   Mostrar_Mensaje_Cuenta = false;
   mostrarBotonAceptar: boolean = false;
 
-
-  imageURL: string | any;
+  url_imagen: string | any;
   Cuenta: string[] | any;
   Mensaje_Cuenta: any;
 
@@ -37,31 +35,37 @@ export class RegistroComponent implements OnInit {
   ) {}
 
   async CrearCuenta() {
-    this.compararContraseña(this.contrasena_usuario, this.confirmar_contrasena);
+    this.compararContraseña(this.contrasena, this.confirmar_contrasena);
     await this.SubirImagenFirestore();
 
     this.Cuenta = [
-      this.NPersonal_usuario,
-      this.contrasena_usuario,
-      this.correo_usuario,
-      this.imageURL,
+      this.matricula,
+      this.correo,
+      this.contrasena,
+      this.url_imagen,
     ];
 
     if (this.comparar == true) {
-
-      this.http.post('http://localhost:3000/Servidor/RegistrarUsuarios/', this.Cuenta)
-      .subscribe(
-        (response) => {
-          this.Mensaje_Cuenta = "La cuenta ha sido creada con éxito";
-          this.Mostrar_Mensaje_Cuenta = true;
-          this.mostrarBotonAceptar = true;
-        },
-        (error) => {
-          this.Mensaje_Cuenta = error.error;
-          this.Mostrar_Mensaje_Cuenta = true;
-          this.mostrarBotonAceptar = true;
-        }
-      );
+      //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/', this.Cuenta)
+      this.http
+        .post('http://localhost:3000/api/v1/estudiantes/crearCuenta', {
+          matricula: this.matricula,
+          correo: this.correo,
+          contrasena: this.contrasena,
+          url_imagen: this.url_imagen,
+        })
+        .subscribe(
+          (response) => {
+            this.Mensaje_Cuenta = 'La cuenta ha sido creada con éxito';
+            this.Mostrar_Mensaje_Cuenta = true;
+            this.mostrarBotonAceptar = true;
+          },
+          (error) => {
+            this.Mensaje_Cuenta = error.error;
+            this.Mostrar_Mensaje_Cuenta = true;
+            this.mostrarBotonAceptar = true;
+          }
+        );
     } else {
       this.Mensaje_Contrasena = true;
       setTimeout(() => {
@@ -82,7 +86,7 @@ export class RegistroComponent implements OnInit {
       try {
         await this.storage.upload(filePath, this.file);
         const downloadUrl = await fileRef.getDownloadURL().toPromise();
-        this.imageURL = downloadUrl;
+        this.url_imagen = downloadUrl;
       } catch (error) {
         console.error('Error uploading image:', error);
       }
@@ -94,19 +98,19 @@ export class RegistroComponent implements OnInit {
   }
 
   actualizarCorreo(event: Event): void {
-    this.correo_usuario = (event.target as HTMLInputElement).value;
+    this.correo = (event.target as HTMLInputElement).value;
   }
 
   actualizarContrasena(event: Event): void {
-    this.contrasena_usuario = (event.target as HTMLInputElement).value;
+    this.contrasena = (event.target as HTMLInputElement).value;
   }
 
   actualizarconfirmarContrasena(event: Event): void {
     this.confirmar_contrasena = (event.target as HTMLInputElement).value;
   }
 
-  actualizarNumeroPersonal(event: Event): void {
-    this.NPersonal_usuario = +(event.target as HTMLInputElement).value;
+  actualizarmatricula(event: Event): void {
+    this.matricula = +(event.target as HTMLInputElement).value;
   }
 
   compararContraseña(contra1: string, contra2: string) {
@@ -125,7 +129,7 @@ export class RegistroComponent implements OnInit {
   MostrarImagen(file: File) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
-      this.imageURL = e.target.result;
+      this.url_imagen = e.target.result;
     };
     reader.readAsDataURL(file);
   }

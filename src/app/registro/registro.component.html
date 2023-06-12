@@ -10,13 +10,13 @@
         <span class="input-item">
           <i class="fa fa-user-circle"></i>
         </span>
-        <input class="form-input" id="correo" type="email" placeholder="@Correo" [value]="correo_usuario" (input)="actualizarCorreo($event)" required />
+        <input class="form-input" id="correo" type="email" placeholder="@Correo" [value]="correo" (input)="actualizarCorreo($event)" required />
         <br />
 
         <span class="input-item">
           <i class="fa fa-key"></i>
         </span>
-        <input class="form-input" type="password" id="contraseña" name="password" placeholder="Contraseña" [value]="contrasena_usuario" (input)="actualizarContrasena($event)" required />
+        <input class="form-input" type="password" id="contraseña" name="password" placeholder="Contraseña" [value]="contrasena" (input)="actualizarContrasena($event)" required />
         <br />
 
         <span class="input-item">
@@ -28,10 +28,10 @@
         <span class="input-item">
           <i class="fa fa-user-circle"></i>
         </span>
-        <input class="form-input" id="numeroPersonal" type="text" placeholder="NumeroPersonal" [value]="NPersonal_usuario" (input)="actualizarNumeroPersonal($event)" required />
+        <input class="form-input" id="numeroPersonal" type="text" placeholder="NumeroPersonal" [value]="matricula" (input)="actualizarmatricula($event)" required />
 
         <input style="margin-top: 1rem;" type="file" (change)="GuardarImagen($event)">
-        <img class="img-preview" *ngIf="imageURL" [src]="imageURL" alt="Imagen Subida">
+        <img class="img-preview" *ngIf="url_imagen" [src]="url_imagen" alt="Imagen Subida">
 
         <button style="width: 50%;" class="log-in" (click)="CrearCuenta()">Crear Cuenta</button>
       </div>

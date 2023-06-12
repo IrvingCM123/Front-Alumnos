@@ -29,9 +29,8 @@ export class LoginComponent implements OnInit {
     let response$;
     this.responseSuccessful = false;
 
-    response$ = await this.http.post('http://localhost:3000/Servidor/IniciarSesion', [usuario,contraseña]).toPromise();
-
-
+    response$ = await this.http.post('http://localhost:3000/api/v1/estudiantes/IniciarSesion', [usuario,contraseña]).toPromise();
+    console.log(response$)
     try {
       const Resp:any = await response$;
       this.datosLocales.guardar_DatoLocal('Resp', Resp.token);
@@ -48,7 +47,7 @@ export class LoginComponent implements OnInit {
     if (loginSuccessful) {
       this.datosLocales.Actualizar_Login(true);
       this.datosLocales.guardar_DatoLocal('login', true);
-      this.router.navigate(['/Inicio/']);
+      this.router.navigate(['/Menu']);
     } else {
       this.datosLocales.Actualizar_Login(false);
       this.loginFailed = true;
