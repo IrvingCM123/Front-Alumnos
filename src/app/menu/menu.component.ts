@@ -4,7 +4,6 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FirestoreService } from '../servicios/FirestoreListas.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -13,14 +12,16 @@ import { Observable } from 'rxjs';
 })
 export class MenuComponent implements OnInit {
   public DatosQR: string = '';
+
   private Alumno = '';
   private Matricula = '';
   private Datos: any;
+
   public Token: any;
   public TokenNRC: any;
-  public nrc$: any | Observable<any>;
-  public materias$: any | Observable<any>;
-  public Materias: any;
+  public nrc$: any | string;
+  public materias$: any | string;
+  public Materias: any | string;
 
   constructor(
     private mandar: MandarDatosQR,
@@ -28,7 +29,7 @@ export class MenuComponent implements OnInit {
     private http: HttpClient,
     private datosLocales: FirestoreService,
     private router: Router,
-  ) {}
+  ) { }
 
   MandarDatos() {
     this.obener_Datos(this.Token); // Obtener los datos después de la redirección
@@ -40,47 +41,85 @@ export class MenuComponent implements OnInit {
 
   async ngOnInit() {
     this.Token = this.datosLocales.obtener_DatoLocal('Resp');
-    this.nrc$ = this.obtener_nrcMaterias(this.Token);
-    await this.obener_Datos(this.Token);
-    this.TokenNRC = await this.generarToken(this.nrc$);
-    this.materias$ = this.obtener_Materias(this.TokenNRC.token);
+    this.obtener_nrcMaterias(this.Token);
+    this.obener_Datos(this.Token);
+    this.generarToken(this.nrc$.nrcs);
+    this.obtener_Materias(this.TokenNRC.token);
   }
 
   async obener_Datos(Token: string) {
     const headers = {
       Authorization: Token,
     };
-    try {
-      const response: any = await this.http
-        .get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', { headers })
-        .toPromise();
-      this.Datos = response.data;
-      this.Alumno = this.Datos.nombres + ' ' + this.Datos.apellidos;
-      this.Matricula = this.Datos.matricula;
-    } catch (error) {
-      console.error(error);
-    }
+    // this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    // this.http.get('http://localhost:3000/api/v1/estudiantes/'
+    this.Datos = await new Promise((resolve, reject) => { this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', { headers: headers })
+      .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    this.Alumno = this.Datos.data.nombres + ' ' + this.Datos.data.apellidos;
+    this.Matricula = this.Datos.data.matricula;
   }
 
-  obtener_nrcMaterias(Token: string) {
+  async obtener_nrcMaterias(Token: string) {
     const headers = {
       Authorization: Token,
     };
-    return this.http
-      .get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', { headers });
+    //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {})
+    //http://localhost:3000/api/v1/estudiantes/MateriasAlumno
+    this.nrc$ = await new Promise((resolve, reject) => {
+      this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {
+          headers: headers,
+        })
+        .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
   }
 
-  obtener_Materias(materia: any) {
+  async obtener_Materias(materia: any) {
     const headers = {
       Authorization: materia,
     };
-    return this.http
-      .get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', { headers });
+    //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    //this.http.get('http://localhost:3000/api/v1/estudiantes/materias'
+    this.materias$ = await new Promise((resolve, reject) => {
+      this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', { headers: headers, })
+      .subscribe(
+        (Resp: any) => {
+          resolve(Resp);
+        },
+        (error: any) => {
+          reject(error);
+        }
+      );
+    });
+    this.Materias = this.materias$;
   }
 
-  generarToken(valor: string | any) {
-    return this.http
-      .post('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/generarToken', valor)
-      .toPromise();
+  async generarToken(valor: string | any) {
+    this.TokenNRC = await new Promise((resolve, reject) => {
+      //http://localhost:3000/api/v1/estudiantes/generarToken
+      this.http.post('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/generarToken', valor)
+        .subscribe(
+          (Resp: any) => {
+            resolve(Resp);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
   }
 }
