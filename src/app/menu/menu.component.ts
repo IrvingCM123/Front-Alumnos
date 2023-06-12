@@ -54,7 +54,7 @@ export class MenuComponent implements OnInit {
     };
     // this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
     // this.http.get('http://localhost:3000/api/v1/estudiantes/'
-    this.Datos = await new Promise((resolve, reject) => { this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', { headers: headers })
+    this.Datos = await new Promise((resolve, reject) => { this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', { headers: headers })
       .subscribe(
           (Resp: any) => {
             resolve(Resp);
@@ -75,7 +75,7 @@ export class MenuComponent implements OnInit {
     //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {})
     //http://localhost:3000/api/v1/estudiantes/MateriasAlumno
     this.nrc$ = await new Promise((resolve, reject) => {
-      this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {
+      this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {
           headers: headers,
         })
         .subscribe(
@@ -96,7 +96,7 @@ export class MenuComponent implements OnInit {
     //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
     //this.http.get('http://localhost:3000/api/v1/estudiantes/materias'
     this.materias$ = await new Promise((resolve, reject) => {
-      this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', { headers: headers, })
+      this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', { headers: headers, })
       .subscribe(
         (Resp: any) => {
           resolve(Resp);
@@ -112,7 +112,7 @@ export class MenuComponent implements OnInit {
   async generarToken(valor: string | any) {
     this.TokenNRC = await new Promise((resolve, reject) => {
       //http://localhost:3000/api/v1/estudiantes/generarToken
-      this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/generarToken', valor)
+      this.http.post('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/generarToken', valor)
         .subscribe(
           (Resp: any) => {
             resolve(Resp);

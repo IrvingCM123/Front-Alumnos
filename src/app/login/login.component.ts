@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     let response$;
     this.responseSuccessful = false;
 
-    response$ = await this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/IniciarSesion', [usuario,contraseña]).toPromise();
+    response$ = await this.http.post('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/IniciarSesion', [usuario,contraseña]).toPromise();
     console.log(response$)
     try {
       const Resp:any = await response$;

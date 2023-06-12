@@ -32,7 +32,7 @@ export class PerfilComponent implements OnInit {
       'Authorization': Token
     }
     //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/' , {headers: headers})
-    this.http.get('http://localhost:3000/api/v1/estudiantes/', {headers: headers})
+    this.http.get('https://alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {headers: headers})
     .subscribe(
         (data: any) => {
           this.datos = data.data;
