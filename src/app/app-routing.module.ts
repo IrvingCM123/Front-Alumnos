@@ -11,7 +11,6 @@ const routes: Routes = [
   { path: 'Login', component: LoginComponent},
   { path: 'Menu', component: MenuComponent},
   { path: 'Mostrar', component: CodigoComponent}
-
 ];
 
 

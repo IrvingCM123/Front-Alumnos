@@ -87,7 +87,7 @@ export class MenuComponent implements OnInit {
         );
     });
 
-    console.log(this.nrc$)
+    
   }
 
   async obtener_Materias(materia: any) {
@@ -108,7 +108,6 @@ export class MenuComponent implements OnInit {
       );
     });
     this.Materias = this.materias$;
-    console.log(this.Materias)
   }
 
   async generarToken(valor: string | any) {

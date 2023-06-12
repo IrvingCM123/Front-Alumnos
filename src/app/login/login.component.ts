@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
       this.datosLocales.Actualizar_Login(true);
       this.datosLocales.guardar_DatoLocal('login', true);
       this.router.navigate(['/Menu']);
+      this.location.go;
     } else {
       this.datosLocales.Actualizar_Login(false);
       this.loginFailed = true;
