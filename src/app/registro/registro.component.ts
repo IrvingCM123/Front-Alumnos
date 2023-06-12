@@ -47,8 +47,8 @@ export class RegistroComponent implements OnInit {
 
     if (this.comparar == true) {
       //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/', this.Cuenta)
-      this.http
-        .post('http://localhost:3000/api/v1/estudiantes/crearCuenta', {
+      // this.http.post('http://localhost:3000/api/v1/estudiantes/crearCuenta'
+      this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/crearCuenta', {
           matricula: this.matricula,
           correo: this.correo,
           contrasena: this.contrasena,

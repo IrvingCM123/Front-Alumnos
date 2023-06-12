@@ -52,8 +52,9 @@ export class MenuComponent implements OnInit {
     const headers = {
       Authorization: Token,
     };
-    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
-    this.Datos = await new Promise((resolve, reject) => { this.http.get('http://localhost:3000/api/v1/estudiantes/', { headers: headers })
+    // this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    // this.http.get('http://localhost:3000/api/v1/estudiantes/'
+    this.Datos = await new Promise((resolve, reject) => { this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', { headers: headers })
       .subscribe(
           (Resp: any) => {
             resolve(Resp);
@@ -71,9 +72,10 @@ export class MenuComponent implements OnInit {
     const headers = {
       Authorization: Token,
     };
-    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', {})
+    //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {})
+    //http://localhost:3000/api/v1/estudiantes/MateriasAlumno
     this.nrc$ = await new Promise((resolve, reject) => {
-      this.http.get('http://localhost:3000/api/v1/estudiantes/MateriasAlumno', {
+      this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/MateriasAlumno', {
           headers: headers,
         })
         .subscribe(
@@ -91,9 +93,10 @@ export class MenuComponent implements OnInit {
     const headers = {
       Authorization: materia,
     };
-    //this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    //this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/', {})
+    //this.http.get('http://localhost:3000/api/v1/estudiantes/materias'
     this.materias$ = await new Promise((resolve, reject) => {
-      this.http.get('http://localhost:3000/api/v1/estudiantes/materias', { headers: headers, })
+      this.http.get('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/materias', { headers: headers, })
       .subscribe(
         (Resp: any) => {
           resolve(Resp);
@@ -108,7 +111,8 @@ export class MenuComponent implements OnInit {
 
   async generarToken(valor: string | any) {
     this.TokenNRC = await new Promise((resolve, reject) => {
-      this.http.post('http://localhost:3000/api/v1/estudiantes/generarToken', valor)
+      //http://localhost:3000/api/v1/estudiantes/generarToken
+      this.http.post('https://api-alumnos-service-alumnos-fermindra.cloud.okteto.net/api/v1/estudiantes/generarToken', valor)
         .subscribe(
           (Resp: any) => {
             resolve(Resp);
